@@ -1,6 +1,8 @@
 package com.sistema.sistema_contabil.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,8 +10,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
+
+
 import com.sistema.sistema_contabil.model.Usuario;
 import com.sistema.sistema_contabil.repository.UsuarioRepository;
+import com.sistema.sistema_contabil.security.JwtUtil;
 import com.sistema.sistema_contabil.service.LoginService;
 
 @RestController
@@ -26,6 +32,24 @@ public class LoginController {
       @Autowired
     private LoginService loginService;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
+
+    @PostMapping
+    public ResponseEntity<?> login(@RequestBody Usuario usuario) {
+    boolean autenticado = loginService.autenticarUsuario(usuario.getLogin(), usuario.getSenha());
+    if (autenticado) {
+        String token = jwtUtil.generateToken(usuario.getLogin());
+        return ResponseEntity.ok().body(Collections.singletonMap("token", token));
+    } else {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login inválido");
+    }
+}
+
+
+/* 
+
     @PostMapping
     public boolean login(@RequestBody Usuario usuario) {
         System.out.println("Login recebido: " + usuario.getLogin());
@@ -40,11 +64,18 @@ public class LoginController {
     
     }
 
+    */
+
     @PostMapping("/criar-usuario")
     public String criarUsuario(@RequestBody Usuario usuario) {
         return loginService.cadastrarUsuario(usuario);
     }
 }
+
+
+
+
+
 
 
 
