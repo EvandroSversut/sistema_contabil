@@ -1,20 +1,20 @@
 package com.sistema.sistema_contabil.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.sistema.sistema_contabil.model.Usuario;
 import com.sistema.sistema_contabil.repository.UsuarioRepository;
 import com.sistema.sistema_contabil.service.LoginService;
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
-
 @RestController
 @RequestMapping("/api/login")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200")
 public class LoginController {
 
     @Autowired
@@ -29,7 +29,15 @@ public class LoginController {
     @PostMapping
     public boolean login(@RequestBody Usuario usuario) {
         System.out.println("Login recebido: " + usuario.getLogin());
+        System.out.println("🔵 Início do login no back-end");
+        long inicio = System.nanoTime();
+        long fim = System.nanoTime();
+        long duracaoMs = (fim - inicio) / 1_000_000; // converte para milissegundos
+    System.out.println("⏱️ Tempo total de execução (back-end): " + duracaoMs + " ms");
+
         return loginService.autenticarUsuario(usuario.getLogin(), usuario.getSenha());
+        
+    
     }
 
     @PostMapping("/criar-usuario")

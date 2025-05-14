@@ -18,11 +18,20 @@ public class LoginService {
     private PasswordEncoder passwordEncoder;
 
     public boolean autenticarUsuario(String login, String senhaDigitada) {
+        System.out.println("🔍 Buscando usuário no banco com login: '" + login + "'");
+        long inicio = System.nanoTime();
         Optional<Usuario> usuarioOptional = usuarioRepository.findByLogin(login);
+         long fim = System.nanoTime();
+        System.out.println("⏱️ Tempo da consulta no banco: " + ((fim - inicio) / 1_000_000) + " ms");
         if (usuarioOptional.isPresent()) {
             Usuario usuario = usuarioOptional.get();
-            return passwordEncoder.matches(senhaDigitada, usuario.getSenha());
+             System.out.println("✅ Usuário encontrado: " + usuario.getLogin());
+             boolean senhaOk = passwordEncoder.matches(senhaDigitada, usuario.getSenha());
+        System.out.println("🔐 Senha correta? " + senhaOk);
+
+        return senhaOk;
         }
+         System.out.println("❌ Usuário não encontrado");
         return false;
     }
 
