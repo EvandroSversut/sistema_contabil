@@ -17,7 +17,8 @@ import com.sistema.sistema_contabil.security.JwtUtil;
 import com.sistema.sistema_contabil.service.LoginService;
 
 @RestController
-@RequestMapping("/api/login")
+//@RequestMapping("/api/login")
+@RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:4200")
 public class LoginController {
 
@@ -39,6 +40,22 @@ public class LoginController {
     }
 }
 
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PostMapping("/criar-usuario")
+    public String criarUsuario(@RequestBody Usuario usuario) {
+        return loginService.cadastrarUsuario(usuario);
+    }
+
+
+    // Exemplo no Controller
+    @GetMapping("/api/teste-protegido")
+    public ResponseEntity<String> testeProtegido() {
+    return ResponseEntity.ok("Token JWT válido. Acesso permitido!");
+    }
+
+
+}
+
 
 /* 
 
@@ -57,23 +74,6 @@ public class LoginController {
     }
 
     */
-
-    @PostMapping("/criar-usuario")
-    public String criarUsuario(@RequestBody Usuario usuario) {
-        return loginService.cadastrarUsuario(usuario);
-    }
-
-
-
-// Exemplo no Controller
-@GetMapping("/api/teste-protegido")
-public ResponseEntity<String> testeProtegido() {
-    return ResponseEntity.ok("Token JWT válido. Acesso permitido!");
-}
-
-
-}
-
 
 
 

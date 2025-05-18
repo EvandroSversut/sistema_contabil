@@ -9,8 +9,11 @@ public class PessoaFisica extends Pessoa {
     @Column(nullable = false, unique = true)
     private String cpf;
 
-    @Column
-    private String telefone;
+    @Column(nullable = false)
+    private String rg;
+
+    @Column(nullable = false)
+    private String estadoCivil;
 
     public String getCpf() {
         return cpf;
@@ -20,13 +23,23 @@ public class PessoaFisica extends Pessoa {
         this.cpf = cpf;
     }
 
-    public String getTelefone() {
-        return telefone;
+    public String getRg() {
+        return rg;
     }
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
+    public void setRg(String rg) {
+        this.rg = rg;
     }
+
+    public String getEstadoCivil() {
+        return estadoCivil;
+    }
+
+    public void setEstadoCivil(String estadoCivil) {
+        this.estadoCivil = estadoCivil;
+    }
+
+   
 
     // Getters e setters
     
