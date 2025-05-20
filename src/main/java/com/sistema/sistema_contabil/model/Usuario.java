@@ -1,5 +1,6 @@
 package com.sistema.sistema_contabil.model;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import jakarta.persistence.*;
@@ -19,7 +20,7 @@ public class Usuario {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String login;
+    private String email; // Pode ser e-mail, CPF, código...
 
     @Column(nullable = false)
     private String senha;
@@ -36,5 +37,9 @@ public class Usuario {
     ) //✅ Permite que um usuário tenha múltiplos acessos e um acesso seja compartilhado entre vários usuários.
     private Set<Acesso> acessos;
 
+    @Column(name = "data_expiracao_acesso")
+    private LocalDate dataExpiracaoAcesso;
+
+    
     
 }

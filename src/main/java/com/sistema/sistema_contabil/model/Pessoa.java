@@ -15,14 +15,17 @@ public class Pessoa {
     @Column(nullable = false)
     private String nome;
 
-    @Column(nullable = false, unique = true)
-    private String email;
-
     @Column(nullable = false)
     private String telefone;
 
     @Column(nullable = false)
-    private String endereco;
+    private String rua;
+
+    @Column(nullable = false)
+    private String numero;
+
+    @Column(nullable = false)
+    private String email;
 
     public Long getId() {
         return id;
@@ -56,14 +59,23 @@ public class Pessoa {
         this.telefone = telefone;
     }
 
-    public String getEndereco() {
-        return endereco;
+    public String getRua() {
+        return rua;
     }
 
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
+    public void setRua(String rua) {
+        this.rua = rua;
     }
 
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+  
     
    
 }

@@ -31,9 +31,9 @@ public class LoginController {
 
     @PostMapping
     public ResponseEntity<?> login(@RequestBody Usuario usuario) {
-    boolean autenticado = loginService.autenticarUsuario(usuario.getLogin(), usuario.getSenha());
+    boolean autenticado = loginService.autenticarUsuario(usuario.getEmail(), usuario.getSenha());
     if (autenticado) {
-        String token = jwtUtil.generateToken(usuario.getLogin());
+        String token = jwtUtil.generateToken(usuario.getEmail());
         return ResponseEntity.ok().body(Collections.singletonMap("token", token));
     } else {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login inválido");

@@ -14,10 +14,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository.findByLogin(login)
+        Usuario usuario = usuarioRepository.findByEmail(login)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
         return User.builder()
-                .username(usuario.getLogin())
+                .username(usuario.getEmail())
                 .password(usuario.getSenha())
                 .roles("USER") // ou ADMIN se quiser expandir depois
                 .build();
