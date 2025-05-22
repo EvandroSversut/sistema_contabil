@@ -38,6 +38,7 @@ public class PessoaFisicaController {
 
       @PostMapping("/completo")
     public ResponseEntity<String> cadastrarPessoaComUsuario(@RequestBody PessoaUsuarioDTO dto) {
+       try{
         System.out.println("📥 Dados recebidos do front-end:");
         System.out.println("Nome: " + dto.getNome());
         System.out.println("Email: " + dto.getEmail());
@@ -47,29 +48,54 @@ public class PessoaFisicaController {
         System.out.println("Senha: " + dto.getSenha());
 
         // Verifica se já existe login
-        if (usuarioRepo.findByEmail(dto.email).isPresent()) {
-            return ResponseEntity.badRequest().body("Login já existe!"); // login é o email
-        }
+       // if (usuarioRepo.findByEmail(dto.email).isPresent()) {
+       //     return ResponseEntity.badRequest().body("Login já existe!"); // login é o email
+       // }
 
+       // Verificações de duplicidade ANTES de salvar
+       if(pessoaRepo.existsByCpf(dto.getCpf())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Cpf já cadastrado.");
+       }
+       if (usuarioRepo.existsByEmail(dto.getEmail())){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Email já cadastrado.");
+       }
+
+         // Cria pessoa
         PessoaFisica pessoa = new PessoaFisica();
-        pessoa.setNome(dto.nome);
-        pessoa.setEmail(dto.email);
-        pessoa.setCpf(dto.cpf);
-        pessoa.setTelefone(dto.telefone);
-        pessoa = pessoaRepo.save(pessoa);
+        pessoa.setNome(dto.getNome());
+        pessoa.setCpf(dto.getCpf());
+        pessoa.setRg(dto.getRg());
+        pessoa.setTelefone(dto.getTelefone());
+        pessoa.setRua(dto.getRua());
+        pessoa.setNumero((dto.getNumero()));
+        pessoa.setEmail(dto.getEmail());
 
+        pessoa = pessoaRepo.save(pessoa);
+       
+        // Cria usuario
         Usuario usuario = new Usuario();
-        usuario.setEmail(dto.email);
-        usuario.setSenha(passwordEncoder.encode(dto.senha));
+        usuario.setEmail(dto.getEmail());
+        usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
         usuario.setPessoaFisica(pessoa);
         usuario.setDataExpiracaoAcesso(LocalDate.now().plusDays(15)); // 15 dias grátis
+
         usuarioRepo.save(usuario);
 
         return ResponseEntity.ok("Cadastro realizado com sucesso!");
+
+        } catch (DataIntegrityViolationException ex) {
+        if (ex.getCause() != null && ex.getCause().getMessage().contains("cpf")) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("CPF já cadastrado.");
+        } else if (ex.getCause() != null && ex.getCause().getMessage().contains("email")) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("E-mail já cadastrado.");
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro de integridade no banco de dados.");
+        }
+    } catch (Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno: " + ex.getMessage());
     }
+ }
 }
-
-
 /*
 
    @PostMapping

@@ -10,6 +10,7 @@ public class PessoaUsuarioDTO {
     public String numero;
     public String email;
     public String senha;
+    
     public String getNome() {
         return nome;
     }

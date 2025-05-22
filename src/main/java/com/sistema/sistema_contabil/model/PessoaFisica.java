@@ -12,8 +12,8 @@ public class PessoaFisica extends Pessoa {
     @Column(nullable = false)
     private String rg;
 
-    @Column(nullable = false)
-    private String estadoCivil;
+    //@Column(nullable = false)
+    //private String estadoCivil;
 
     public String getCpf() {
         return cpf;
@@ -29,14 +29,6 @@ public class PessoaFisica extends Pessoa {
 
     public void setRg(String rg) {
         this.rg = rg;
-    }
-
-    public String getEstadoCivil() {
-        return estadoCivil;
-    }
-
-    public void setEstadoCivil(String estadoCivil) {
-        this.estadoCivil = estadoCivil;
     }
 
    
