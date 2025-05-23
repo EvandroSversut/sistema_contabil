@@ -20,6 +20,7 @@ import com.sistema.sistema_contabil.model.PessoaFisica;
 import com.sistema.sistema_contabil.model.Usuario;
 import com.sistema.sistema_contabil.repository.PessoaFisicaRepository;
 import com.sistema.sistema_contabil.repository.UsuarioRepository;
+import com.sistema.sistema_contabil.service.EmailService;
 
 @RestController
 @RequestMapping("/api/pessoa-fisica")
@@ -34,6 +35,9 @@ public class PessoaFisicaController {
 
      @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EmailService emailService;
 
 
       @PostMapping("/completo")
@@ -80,6 +84,20 @@ public class PessoaFisicaController {
         usuario.setDataExpiracaoAcesso(LocalDate.now().plusDays(15)); // 15 dias grátis
 
         usuarioRepo.save(usuario);
+
+       // Envia e-mail de boas-vindas
+    String assunto = "Bem-vindo ao Sistema Contábil";
+    String mensagem = "Olá " + dto.getNome() + ",\n\n"
+    + "Seu cadastro foi realizado com sucesso.\n"
+    + "Você tem 15 dias gratuitos de acesso.\n\n"
+    + "Login: " + dto.getEmail() + "\n"
+    + "Senha: " + dto.getSenha() + "\n\n"
+    + "Acesse nosso sistema e aproveite!\n\n"
+    + "Atenciosamente,\nEquipe do Sistema Contábil";
+
+    emailService.enviarEmailSimples(dto.getEmail(), assunto, mensagem);
+
+
 
         return ResponseEntity.ok("Cadastro realizado com sucesso!");
 
