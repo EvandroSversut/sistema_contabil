@@ -110,10 +110,29 @@ public class PessoaFisicaController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro de integridade no banco de dados.");
         }
     } catch (Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno: " + ex.getMessage());
-    }
- }
+    ex.printStackTrace(); // 👉 Isso exibe o erro completo no console
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                         .body("Erro interno: " + ex.getMessage());
 }
+
+ }
+
+@GetMapping("/teste-email")
+public String enviarEmailTeste() {
+    emailService.enviarEmailSimples(
+        "seuemaildestino@seudominio.com", 
+        "Teste de Email", 
+        "Esse é um e-mail de teste enviado do Spring Boot via HostGator SMTP."
+    );
+    return "Tentativa de envio realizada.";
+}
+
+
+}
+
+
+
+
 /*
 
    @PostMapping

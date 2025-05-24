@@ -17,8 +17,8 @@ import com.sistema.sistema_contabil.security.JwtUtil;
 import com.sistema.sistema_contabil.service.LoginService;
 
 @RestController
-//@RequestMapping("/api/login")
-@RequestMapping("/api")
+@RequestMapping("/api/login")
+//@RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:4200")
 public class LoginController {
 
