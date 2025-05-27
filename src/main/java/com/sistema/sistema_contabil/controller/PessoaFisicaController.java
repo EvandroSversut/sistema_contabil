@@ -1,8 +1,6 @@
 package com.sistema.sistema_contabil.controller;
 
 import java.time.LocalDate;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -45,9 +43,17 @@ public class PessoaFisicaController {
        try{
         System.out.println("📥 Dados recebidos do front-end:");
         System.out.println("Nome: " + dto.getNome());
-        System.out.println("Email: " + dto.getEmail());
         System.out.println("CPF: " + dto.getCpf());
+        System.out.println("RG: " + dto.getRg());
         System.out.println("Telefone: " + dto.getTelefone());
+        System.out.println("Rua: " + dto.getRua());
+        System.out.println("Numero: " + dto.getNumero());
+        System.out.println("Complemento: " + dto.getComplemento());
+        System.out.println("Bairro: " + dto.getBairro());
+        System.out.println("CEP: " + dto.getCep());
+        System.out.println("Cidade: " + dto.getCidade());
+        System.out.println("UF: " + dto.getUf());
+
         System.out.println("Login: " + dto.getEmail());
         System.out.println("Senha: " + dto.getSenha());
 
@@ -72,6 +78,11 @@ public class PessoaFisicaController {
         pessoa.setTelefone(dto.getTelefone());
         pessoa.setRua(dto.getRua());
         pessoa.setNumero((dto.getNumero()));
+        pessoa.setComplemento((dto.getComplemento()));
+        pessoa.setBairro((dto.getBairro()));
+        pessoa.setCep((dto.getCep()));
+        pessoa.setCidade((dto.getCidade()));
+        pessoa.setUf((dto.getUf()));
         pessoa.setEmail(dto.getEmail());
 
         pessoa = pessoaRepo.save(pessoa);
