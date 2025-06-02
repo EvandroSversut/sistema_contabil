@@ -130,6 +130,13 @@ public class Pessoa {
         this.email = email;
     }
 
+    @Override
+    public String toString() {
+        return "Pessoa [id=" + id + ", nome=" + nome + ", telefone=" + telefone + ", rua=" + rua + ", numero=" + numero
+                + ", complemento=" + complemento + ", bairro=" + bairro + ", cep=" + cep + ", cidade=" + cidade
+                + ", uf=" + uf + ", email=" + email + "]";
+    }
+
     
    
 }

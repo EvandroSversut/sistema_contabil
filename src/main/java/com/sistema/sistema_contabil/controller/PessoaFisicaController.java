@@ -1,6 +1,9 @@
 package com.sistema.sistema_contabil.controller;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -8,9 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sistema.sistema_contabil.dto.PessoaUsuarioDTO;
@@ -25,38 +31,30 @@ import com.sistema.sistema_contabil.service.EmailService;
 @CrossOrigin(origins = "http://localhost:4200")
 public class PessoaFisicaController {
 
+   
     @Autowired
     private PessoaFisicaRepository pessoaRepo;
 
     @Autowired
     private UsuarioRepository usuarioRepo;
 
-     @Autowired
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private EmailService emailService;
 
 
-      @PostMapping("/completo")
+    @PostMapping("/cadastro")
     public ResponseEntity<String> cadastrarPessoaComUsuario(@RequestBody PessoaUsuarioDTO dto) {
        try{
-        System.out.println("📥 Dados recebidos do front-end:");
-        System.out.println("Nome: " + dto.getNome());
-        System.out.println("CPF: " + dto.getCpf());
-        System.out.println("RG: " + dto.getRg());
-        System.out.println("Telefone: " + dto.getTelefone());
-        System.out.println("Rua: " + dto.getRua());
-        System.out.println("Numero: " + dto.getNumero());
-        System.out.println("Complemento: " + dto.getComplemento());
-        System.out.println("Bairro: " + dto.getBairro());
-        System.out.println("CEP: " + dto.getCep());
-        System.out.println("Cidade: " + dto.getCidade());
-        System.out.println("UF: " + dto.getUf());
-
+        System.out.println("📥---------- Dados recebidos do front-end:---------");
         System.out.println("Login: " + dto.getEmail());
         System.out.println("Senha: " + dto.getSenha());
-
+        System.out.println("Nome: " + dto.getNome());
+        System.out.println("CPF: " + dto.getCpf());
+        System.out.println("Telefone: " + dto.getTelefone());
+        
         // Verifica se já existe login
        // if (usuarioRepo.findByEmail(dto.email).isPresent()) {
        //     return ResponseEntity.badRequest().body("Login já existe!"); // login é o email
@@ -70,19 +68,13 @@ public class PessoaFisicaController {
         return ResponseEntity.status(HttpStatus.CONFLICT).body("Email já cadastrado.");
        }
 
+       
+
          // Cria pessoa
         PessoaFisica pessoa = new PessoaFisica();
         pessoa.setNome(dto.getNome());
         pessoa.setCpf(dto.getCpf());
-        pessoa.setRg(dto.getRg());
         pessoa.setTelefone(dto.getTelefone());
-        pessoa.setRua(dto.getRua());
-        pessoa.setNumero((dto.getNumero()));
-        pessoa.setComplemento((dto.getComplemento()));
-        pessoa.setBairro((dto.getBairro()));
-        pessoa.setCep((dto.getCep()));
-        pessoa.setCidade((dto.getCidade()));
-        pessoa.setUf((dto.getUf()));
         pessoa.setEmail(dto.getEmail());
 
         pessoa = pessoaRepo.save(pessoa);
@@ -136,6 +128,47 @@ public String enviarEmailTeste() {
         "Esse é um e-mail de teste enviado do Spring Boot via HostGator SMTP."
     );
     return "Tentativa de envio realizada.";
+}
+
+ @GetMapping("/listar")
+    public List<PessoaFisica> listar() {
+        List<PessoaFisica> lista = pessoaRepo.findAll();
+        System.out.println("📜************** Lista de pessoas físicas:***************");
+        //lista.forEach(p -> System.out.println(p));
+        lista.forEach(p -> System.out.println("🔸 Nome: " + p.getNome() + 
+                                              " | CPF: "  + p.getCpf() + 
+                                              " | RG: "   + p.getRg() + 
+                                              " | Telefone: " + p.getTelefone() + 
+                                              " | Rua: "  + p.getRua() + 
+                                              " | Numero: " + p.getNumero() + 
+                                              " | Complem.: " + p.getComplemento() + 
+                                              " | Bairro: " + p.getBairro() + 
+                                              " | CEP: " + p.getCep() + 
+                                              " | Cidade: " + p.getCidade() +
+                                              " | UF: " + p.getUf() +
+                                              " | Email: " + p.getEmail()
+                                              ));
+         System.out.println("***********************Fim da Lista********************");                                        
+        return lista;
+    }
+
+ @GetMapping("/buscar")
+ public List<PessoaFisica> buscar(@RequestParam String filtro) {
+ return pessoaRepo.findByNomeContainingIgnoreCaseOrEmailContainingIgnoreCase(filtro, filtro);
+    }
+
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody PessoaFisica pessoa) {
+    Optional<PessoaFisica> existente = pessoaRepo.findById(id);
+    if (existente.isPresent()) {
+        pessoa.setId(id);
+        pessoaRepo.save(pessoa);
+        return ResponseEntity.ok("Pessoa atualizada com sucesso!");
+    } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pessoa não encontrada!");
+    }
 }
 
 

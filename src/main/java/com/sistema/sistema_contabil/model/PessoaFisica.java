@@ -31,8 +31,11 @@ public class PessoaFisica extends Pessoa {
         this.rg = rg;
     }
 
-   
+    @Override
+    public String toString() {
+        return "PessoaFisica [cpf=" + cpf + ", rg=" + rg + super.toString() + "]";
+    }
 
-    // Getters e setters
+   
     
 }
