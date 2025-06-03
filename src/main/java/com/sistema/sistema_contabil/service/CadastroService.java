@@ -52,7 +52,7 @@ public class CadastroService {
 
         // 🔹 Cadastrar Usuário
         Usuario usuario = new Usuario();
-        usuario.setLogin(dto.getEmail());
+        usuario.setEmail(dto.getEmail());
         usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
         usuario.setPessoaFisica(pessoaFisica);
 

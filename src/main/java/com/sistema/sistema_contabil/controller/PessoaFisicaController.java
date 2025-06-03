@@ -27,7 +27,7 @@ import com.sistema.sistema_contabil.repository.UsuarioRepository;
 import com.sistema.sistema_contabil.service.EmailService;
 
 @RestController
-@RequestMapping("/api/pessoa-fisica")
+@RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:4200")
 public class PessoaFisicaController {
 
@@ -45,7 +45,7 @@ public class PessoaFisicaController {
     private EmailService emailService;
 
 
-    @PostMapping("/cadastro")
+    @PostMapping("/cadast")
     public ResponseEntity<String> cadastrarPessoaComUsuario(@RequestBody PessoaUsuarioDTO dto) {
        try{
         System.out.println("📥---------- Dados recebidos do front-end:---------");
@@ -53,6 +53,7 @@ public class PessoaFisicaController {
         System.out.println("Senha: " + dto.getSenha());
         System.out.println("Nome: " + dto.getNome());
         System.out.println("CPF: " + dto.getCpf());
+        System.out.println("RG: " + dto.getRg());
         System.out.println("Telefone: " + dto.getTelefone());
         
         // Verifica se já existe login
@@ -74,8 +75,17 @@ public class PessoaFisicaController {
         PessoaFisica pessoa = new PessoaFisica();
         pessoa.setNome(dto.getNome());
         pessoa.setCpf(dto.getCpf());
+        pessoa.setRg(dto.getRg());
         pessoa.setTelefone(dto.getTelefone());
         pessoa.setEmail(dto.getEmail());
+        
+        System.out.println("*****************Salvando Pessoa*********");
+        System.out.println("Nome: " + dto.getNome());
+        System.out.println("CPF: " + dto.getCpf());
+        System.out.println("RG: " + dto.getRg());
+        System.out.println("Telefone: " + dto.getTelefone());
+        System.out.println("Email: " + dto.getEmail());
+        System.out.println("*****************Salvando Pessoa - fim*********");
 
         pessoa = pessoaRepo.save(pessoa);
        
