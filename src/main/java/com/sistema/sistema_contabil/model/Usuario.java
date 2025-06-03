@@ -1,9 +1,19 @@
 package com.sistema.sistema_contabil.model;
 
-import java.time.LocalDate;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.List;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,8 +35,14 @@ public class Usuario {
     @Column(nullable = false)
     private String senha;
 
+    @Column(name = "data_criacao", nullable = false)
+    private LocalDateTime dataCriacao = LocalDateTime.now();
+
+    @Column(nullable = false)
+    private boolean ativo = true;
+    
     @OneToOne
-    @JoinColumn(name = "pessoa_fisica_id")
+    @JoinColumn(name = "pessoa_fisica_id", nullable = false)
     private PessoaFisica pessoaFisica;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -35,11 +51,8 @@ public class Usuario {
         joinColumns = @JoinColumn(name = "usuario_id"),
         inverseJoinColumns = @JoinColumn(name = "acesso_id")
     ) //✅ Permite que um usuário tenha múltiplos acessos e um acesso seja compartilhado entre vários usuários.
-    private Set<Acesso> acessos;
+    private List<Acesso> acessos;
 
-    @Column(name = "data_expiracao_acesso")
-    private LocalDate dataExpiracaoAcesso;
-
-    
+        
     
 }

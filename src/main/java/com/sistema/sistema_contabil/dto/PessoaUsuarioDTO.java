@@ -16,6 +16,7 @@ public class PessoaUsuarioDTO {
     public String email;
     public String senha;
     
+    
     public String getNome() {
         return nome;
     }
@@ -94,7 +95,7 @@ public class PessoaUsuarioDTO {
     public void setSenha(String senha) {
         this.senha = senha;
     }
-    
+     
   
 
     

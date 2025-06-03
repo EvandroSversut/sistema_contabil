@@ -1,6 +1,16 @@
 package com.sistema.sistema_contabil.model;
 
-import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "acesso")
@@ -12,7 +22,10 @@ public class Acesso {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String nome; // Ex: ROLE_ADMIN, ROLE_USER
+    private String descricao; // Ex: ROLE_ADMIN, ROLE_USER
+
+    @ManyToMany(mappedBy = "acessos")
+    private List<Usuario> usuarios = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -22,14 +35,23 @@ public class Acesso {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
-    // Getters e setters
+    public List<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(List<Usuario> usuarios) {
+        this.usuarios = usuarios;
+    }
+
+   
+    
     
 }
